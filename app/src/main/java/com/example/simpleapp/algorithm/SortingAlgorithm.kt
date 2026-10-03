@@ -2,8 +2,7 @@ package com.example.simpleapp.algorithm
 
 import com.example.simpleapp.data.singleElement
 
-
-fun SortingAlgorithm(char: Char): List<String>
+fun sortingAlgorithm(char: String): String
 {
     //loop pool для првоерки того что соритровка по алфавиту с одинаковым весом работает гарантированно
     val primaryText: String = "Primary text for a sorting algorithm which covers at least half " +
@@ -14,7 +13,7 @@ fun SortingAlgorithm(char: Char): List<String>
 
     for (word in primaryText.split(" "))
     {
-        val weight = word.count{it == char}
+        val weight = word.count{it == char.firstOrNull()}
         listOfEntries.add(singleElement(word, weight))
     }
 
@@ -23,5 +22,5 @@ fun SortingAlgorithm(char: Char): List<String>
         .thenBy { it.word })
         .map{it.word}
 
-    return weightSortList
+    return weightSortList.joinToString()
 }
