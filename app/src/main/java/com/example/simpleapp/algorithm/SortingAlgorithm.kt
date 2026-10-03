@@ -13,7 +13,7 @@ fun sortingAlgorithm(char: String): String
 
     for (word in primaryText.split(" "))
     {
-        val weight = word.count{it == char.firstOrNull()}
+        val weight = word.count{it == char.lowercase().firstOrNull()}
         listOfEntries.add(singleElement(word, weight))
     }
 

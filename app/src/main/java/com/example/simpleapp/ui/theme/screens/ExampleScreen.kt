@@ -34,7 +34,6 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
             value = input,
             onValueChange = { newValue ->
                 input = newValue
-                output = sortingAlgorithm(newValue)
             },
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Буква") },
