@@ -1,10 +1,19 @@
 <resources>
-    <string name="app_name">simpleapp</string>
-    <string name="title_gallery">simpleapp</string>
-    <string name="title_favorites">simpleapp</string>
-    <string name="title_settings">simpleapp</string>
-    <string name="action_back">simpleapp</string>
-    <string name="action_settings">simpleapp</string>
-    <string name="action_cancel">simpleapp</string>
-    <string name="action_retry">simpleapp</string>
+    <string name="app_name">Галерея</string>
+
+    <string name="title_gallery">Галерея</string>
+    <string name="title_favorites">Избранное</string>
+    <string name="title_settings">Настройки</string>
+
+    <string name="action_back">Назад</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_retry">Обновить</string>
+
+    <string name="loading">Загрузка…</string>
+    <string name="empty_gallery">Изображения не найдены</string>
+    <string name="empty_gallery_hint">В памяти устройства нет изображений, доступных приложению.</string>
+    <string name="empty_favorites">Нет избранных изображений</string>
+    <string name="empty_favorites_hint">Откройте изображение и нажмите «В избранное».</string>
+
 </resources>

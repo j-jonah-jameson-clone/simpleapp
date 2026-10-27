@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.simpleapp.ui.screens.SettingsScreen
 import com.example.simpleapp.ui.theme.SimpleappTheme
+import com.example.simpleapp.ui.theme.screens.SettingsScreen
 
 class ViewerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
