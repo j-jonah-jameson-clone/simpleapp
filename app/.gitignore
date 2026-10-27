@@ -1,1 +1,12 @@
-/build
+*.iml
+.gradle/
+.kotlin/
+build/
+local.properties
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+.DS_Store

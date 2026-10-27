@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">simpleapp</string>
+    <string name="title_galley">simpleapp</string>
+    <string name="title_favorites">simpleapp</string>
+    <string name="title_settings">simpleapp</string>
+    <string name="action_back">simpleapp</string>
+    <string name="action_settings">simpleapp</string>
+    <string name="action_cancel">simpleapp</string>
+    <string name="action_retry">simpleapp</string>
 </resources>
