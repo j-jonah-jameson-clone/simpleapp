@@ -9,8 +9,11 @@
     <string name="action_settings">Настройки</string>
     <string name="action_cancel">Отмена</string>
     <string name="action_retry">Обновить</string>
+    <string name="action_grant">Разрешить доступ</string>
+    <string name="action_open_settings">Открыть настройки</string>
 
-    <string name="loading">Загрузка…</string>
+    <string name="permission_title">Нет доступа к изображениям</string>
+    <string name="permission_message">Чтобы показать галерею, приложению нужен доступ к изображениям на устройстве. Изображения не копируются и не изменяются приложением.</string>    <string name="loading">Загрузка…</string>
     <string name="empty_gallery">Изображения не найдены</string>
     <string name="empty_gallery_hint">В памяти устройства нет изображений, доступных приложению.</string>
     <string name="empty_favorites">Нет избранных изображений</string>
