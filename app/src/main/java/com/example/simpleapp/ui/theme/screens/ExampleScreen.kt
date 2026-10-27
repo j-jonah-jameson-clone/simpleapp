@@ -1,4 +1,4 @@
-package com.example.simpleapp.ui.theme.screens
+/**package com.example.simpleapp.ui.theme.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -57,3 +57,4 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+**/
