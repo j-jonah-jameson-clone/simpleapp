@@ -38,6 +38,9 @@
     <string name="favorite_remove_title">Убрать из избранного?</string>
     <string name="favorite_remove_message">Изображение «%1$s» больше не будет показываться во вкладке «Избранное». Сам файл останется в памяти устройства.</string>
 
+    <string name="viewer_favorite_add">Добавить в избранное</string>
+    <string name="viewer_favorite_remove">Убрать из избранного</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>

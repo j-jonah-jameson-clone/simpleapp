@@ -60,6 +60,8 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         images?.let { GalleryRepository.filterFavorites(it, favoriteIds) }.orEmpty()
     }
 
+    val galleryImages = images.orEmpty()
+
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
@@ -77,8 +79,14 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         settingsLauncher.launch(SettingsActivity.createIntent(context))
     }
 
-    val openViewer: () -> Unit = {
-        context.startActivity(ViewerActivity.createIntent(context))
+    val viewerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        favoriteIds = preferences.favoriteIds
+    }
+
+    val openImage: (List<ImageItem>, ImageItem) -> Unit = { list, item ->
+        viewerLauncher.launch(ViewerActivity.createIntent(context, list, item.id))
     }
 
     val openAppSettings: () -> Unit = {
@@ -122,7 +130,7 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
             images = images.orEmpty(),
             favoriteIds = favoriteIds,
             gridColumns = gridColumns,
-            onOpenImage = { openViewer() },
+            onOpenImage = { item -> openImage(galleryImages, item) },
             onSettingsClick = openSettings,
             onTabSelected = { selectedTab = it },
             modifier = modifier
@@ -131,7 +139,7 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         MainTab.FAVORITES -> FavoritesScreen(
             favorites = favoriteImages,
             gridColumns = gridColumns,
-            onOpenImage = { openViewer() },
+            onOpenImage = { item -> openImage(favoriteImages, item) },
             onSettingsClick = openSettings,
             onRemoveFavorite = { item ->
                 preferences.toggleFavorite(item.id)
