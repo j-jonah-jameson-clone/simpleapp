@@ -41,6 +41,7 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
 
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.GALLERY) }
     var gridColumns by remember { mutableIntStateOf(preferences.gridColumns) }
+    var favoriteIds by remember { mutableStateOf(preferences.favoriteIds) }
 
     var images by remember { mutableStateOf<List<ImageItem>?>(null) }
     var hasPermission by remember { mutableStateOf(MediaPermissions.isGranted(context)) }
@@ -53,6 +54,10 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         }
         val loaded = withContext(Dispatchers.IO) { GalleryRepository.loadImages(context) }
         images = loaded
+    }
+
+    val favoriteImages = remember(images, favoriteIds) {
+        images?.let { GalleryRepository.filterFavorites(it, favoriteIds) }.orEmpty()
     }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -115,6 +120,7 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
     when (selectedTab) {
         MainTab.GALLERY -> GalleryScreen(
             images = images.orEmpty(),
+            favoriteIds = favoriteIds,
             gridColumns = gridColumns,
             onOpenImage = { openViewer() },
             onSettingsClick = openSettings,
@@ -122,14 +128,18 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
             modifier = modifier
         )
 
-        MainTab.FAVORITES -> MainStateScaffold(
-            selectedTab = selectedTab,
-            onTabSelected = { selectedTab = it },
+        MainTab.FAVORITES -> FavoritesScreen(
+            favorites = favoriteImages,
+            gridColumns = gridColumns,
+            onOpenImage = { openViewer() },
             onSettingsClick = openSettings,
+            onRemoveFavorite = { item ->
+                preferences.toggleFavorite(item.id)
+                favoriteIds = preferences.favoriteIds
+            },
+            onTabSelected = { selectedTab = it },
             modifier = modifier
-        ) {
-            FavoritesEmptyState()
-        }
+        )
     }
 }
 

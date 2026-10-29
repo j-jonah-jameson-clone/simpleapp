@@ -34,6 +34,10 @@
     <string name="about_version_value">1.0.0</string>
     <string name="settings_fixed_hint">Пока доступен один вариант. Остальные появятся в следующих версиях.</string>
 
+    <string name="action_remove_favorite">Убрать</string>
+    <string name="favorite_remove_title">Убрать из избранного?</string>
+    <string name="favorite_remove_message">Изображение «%1$s» больше не будет показываться во вкладке «Избранное». Сам файл останется в памяти устройства.</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>

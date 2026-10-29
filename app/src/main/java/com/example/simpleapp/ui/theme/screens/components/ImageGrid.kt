@@ -16,6 +16,7 @@ private val GRID_PADDING = 4.dp
 @Composable
 fun ImageGrid(
     images: List<ImageItem>,
+    favoriteIds: Set<Long>,
     gridColumns: Int,
     onImageClick: (ImageItem) -> Unit,
     onImageLongClick: (ImageItem) -> Unit,
@@ -32,6 +33,8 @@ fun ImageGrid(
         items(items = images, key = { it.id }) { item ->
             ImageThumbnail(
                 item = item,
+                modifier = Modifier,
+                isFavorite = item.id in favoriteIds,
                 onClick = { onImageClick(item) },
                 onLongClick = { onImageLongClick(item) }
             )

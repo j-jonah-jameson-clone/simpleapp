@@ -112,4 +112,9 @@ object GalleryRepository {
             false
         }
     }
+
+    fun filterFavorites(images: List<ImageItem>, favoriteIds: Set<Long>): List<ImageItem> {
+        if (favoriteIds.isEmpty()) return emptyList()
+        return images.filter { it.id in favoriteIds }
+    }
 }

@@ -19,6 +19,7 @@ import com.example.simpleapp.ui.theme.screens.components.ImageGrid
 @Composable
 fun GalleryScreen(
     images: List<ImageItem>,
+    favoriteIds: Set<Long>,
     gridColumns: Int,
     onOpenImage: (ImageItem) -> Unit,
     onSettingsClick: () -> Unit,
@@ -47,6 +48,7 @@ fun GalleryScreen(
             } else {
                 ImageGrid(
                     images = images,
+                    favoriteIds = favoriteIds,
                     gridColumns = gridColumns,
                     onImageClick = onOpenImage,
                     onImageLongClick = {}
@@ -63,6 +65,7 @@ private fun GalleryEmptyPreview() {
     SimpleappTheme {
         GalleryScreen(
             images = emptyList(),
+            favoriteIds = emptySet(),
             gridColumns = 3,
             onOpenImage = {},
             onSettingsClick = {},
