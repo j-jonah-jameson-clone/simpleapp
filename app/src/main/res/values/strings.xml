@@ -19,4 +19,25 @@
     <string name="empty_favorites">Нет избранных изображений</string>
     <string name="empty_favorites_hint">Откройте изображение и нажмите «В избранное».</string>
 
+    <string name="settings_theme">Тема оформления</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_system">Системная</string>
+    <string name="settings_language">Язык интерфейса</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_en">English</string>
+    <string name="settings_grid">Размер сетки</string>
+    <string name="settings_about">О приложении</string>
+    <string name="about_version">Версия</string>
+    <string name="about_developer">Разработчик</string>
+    <string name="about_developer_name">Гончаров Т.С.</string>
+    <string name="about_version_value">1.0.0</string>
+    <string name="settings_fixed_hint">Пока доступен один вариант. Остальные появятся в следующих версиях.</string>
+
+    <plurals name="grid_columns_value">
+        <item quantity="one">%d колонка</item>
+        <item quantity="few">%d колонки</item>
+        <item quantity="many">%d колонок</item>
+        <item quantity="other">%d колонки</item>
+    </plurals>
 </resources>

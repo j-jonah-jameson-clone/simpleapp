@@ -32,14 +32,15 @@ import com.example.simpleapp.ui.theme.screens.components.LoadingState
 import com.example.simpleapp.ui.theme.screens.components.PermissionRequiredState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
-private const val DEFAULT_GRID_COLUMNS = 3
+import com.example.simpleapp.data.SettingsStore
 
 @Composable
 fun ApplicationMainScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val preferences = remember { SettingsStore(context) }
 
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.GALLERY) }
+    var gridColumns by remember { mutableIntStateOf(preferences.gridColumns) }
 
     var images by remember { mutableStateOf<List<ImageItem>?>(null) }
     var hasPermission by remember { mutableStateOf(MediaPermissions.isGranted(context)) }
@@ -61,8 +62,14 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
                 MediaPermissions.isGranted(context)
     }
 
+    val settingsLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        gridColumns = preferences.gridColumns
+    }
+
     val openSettings: () -> Unit = {
-        context.startActivity(SettingsActivity.createIntent(context))
+        settingsLauncher.launch(SettingsActivity.createIntent(context))
     }
 
     val openViewer: () -> Unit = {
@@ -108,7 +115,7 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
     when (selectedTab) {
         MainTab.GALLERY -> GalleryScreen(
             images = images.orEmpty(),
-            gridColumns = DEFAULT_GRID_COLUMNS,
+            gridColumns = gridColumns,
             onOpenImage = { openViewer() },
             onSettingsClick = openSettings,
             onTabSelected = { selectedTab = it },
