@@ -11,6 +11,8 @@
     <string name="action_retry">Обновить</string>
     <string name="action_grant">Разрешить доступ</string>
     <string name="action_open_settings">Открыть настройки</string>
+    <string name="action_info">Сведения о фото</string>
+    <string name="action_close">Закрыть</string>
 
     <string name="permission_title">Нет доступа к изображениям</string>
     <string name="permission_message">Чтобы показать галерею, приложению нужен доступ к изображениям на устройстве. Изображения не копируются и не изменяются приложением.</string>    <string name="loading">Загрузка…</string>
@@ -40,6 +42,20 @@
 
     <string name="viewer_favorite_add">Добавить в избранное</string>
     <string name="viewer_favorite_remove">Убрать из избранного</string>
+
+    <string name="info_title">Сведения о фото</string>
+    <string name="info_name">Имя файла</string>
+    <string name="info_date">Дата съёмки</string>
+    <string name="info_resolution">Разрешение</string>
+    <string name="info_size">Размер</string>
+    <string name="info_format">Формат</string>
+    <string name="info_folder">Папка</string>
+    <string name="info_camera">Камера</string>
+    <string name="info_iso">ISO</string>
+    <string name="info_exposure">Выдержка</string>
+    <string name="info_aperture">Диафрагма</string>
+    <string name="info_focal_length">Фокусное расстояние</string>
+    <string name="info_unknown">—</string>
 
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>

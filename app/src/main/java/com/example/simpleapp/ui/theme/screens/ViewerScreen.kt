@@ -49,6 +49,27 @@ import com.example.simpleapp.data.ImageDecoder
 import com.example.simpleapp.data.ImageItem
 import com.example.simpleapp.ui.theme.SimpleappTheme
 import kotlin.math.max
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import com.example.simpleapp.data.ExifReader
+import com.example.simpleapp.data.ImageDetails
+import com.example.simpleapp.data.formatAperture
+import com.example.simpleapp.data.formatDateTime
+import com.example.simpleapp.data.formatExposure
+import com.example.simpleapp.data.formatFileSize
+import com.example.simpleapp.data.formatFocalLength
+import com.example.simpleapp.data.formatImageFormat
+import com.example.simpleapp.data.formatIso
+import com.example.simpleapp.data.formatResolution
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 
 private val ViewerBackground = Color(0xFF101012)
 
@@ -69,6 +90,14 @@ fun ViewerScreen(
     ) { images.size }
 
     val current = images[pagerState.currentPage]
+    var showInfo by remember { mutableStateOf(false) }
+    var details by remember(current.id) { mutableStateOf<ImageDetails?>(null) }
+    val context = LocalContext.current
+    LaunchedEffect(showInfo, current.id) {
+        if (showInfo && details == null) {
+            details = ExifReader.loadDetails(context, current)
+        }
+    }
 
     var isZoomed by remember { mutableStateOf(false) }
 
@@ -86,6 +115,13 @@ fun ViewerScreen(
                 image = images[page],
                 isCurrent = page == pagerState.currentPage,
                 onZoomChange = { isZoomed = it }
+            )
+        }
+        if (showInfo) {
+            ImageInfoDialog(
+                image = current,
+                details = details,
+                onDismiss = { showInfo = false }
             )
         }
 
@@ -116,6 +152,13 @@ fun ViewerScreen(
                             if (isFavorite) R.string.viewer_favorite_remove
                             else R.string.viewer_favorite_add
                         ),
+                        tint = Color.White
+                    )
+                }
+                IconButton(onClick = { showInfo = true }) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = stringResource(R.string.action_info),
                         tint = Color.White
                     )
                 }
@@ -204,6 +247,92 @@ fun ViewerLoading(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun ImageInfoDialog(
+    image: ImageItem,
+    details: ImageDetails?,
+    onDismiss: () -> Unit
+) {
+    val unknown = stringResource(R.string.info_unknown)
+    val camera = details?.let { listOfNotNull(it.cameraMake, it.cameraModel).joinToString(" ") }
+        ?.takeIf { it.isNotBlank() }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.info_title)) },
+        text = {
+            if (details == null) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    InfoRow(stringResource(R.string.info_name), details.name)
+                    InfoRow(stringResource(R.string.info_date), formatDateTime(details.dateMillis))
+                    InfoRow(
+                        stringResource(R.string.info_resolution),
+                        formatResolution(details.width, details.height) ?: unknown
+                    )
+                    InfoRow(stringResource(R.string.info_size), formatFileSize(details.sizeBytes))
+                    InfoRow(
+                        stringResource(R.string.info_format),
+                        formatImageFormat(details.mimeType) ?: unknown
+                    )
+                    InfoRow(stringResource(R.string.info_folder), details.folder)
+                    InfoRow(stringResource(R.string.info_camera), camera ?: unknown)
+                    InfoRow(
+                        stringResource(R.string.info_iso),
+                        formatIso(details.iso) ?: unknown
+                    )
+                    InfoRow(
+                        stringResource(R.string.info_exposure),
+                        formatExposure(details.exposureSeconds) ?: unknown
+                    )
+                    InfoRow(
+                        stringResource(R.string.info_aperture),
+                        formatAperture(details.aperture) ?: unknown
+                    )
+                    InfoRow(
+                        stringResource(R.string.info_focal_length),
+                        formatFocalLength(details.focalLengthMillimeters) ?: unknown
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.action_close))
+            }
+        }
+    )
+}
+
+@Composable
+private fun InfoRow(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(start = 12.dp)
+        )
+    }
+}
 
 @Preview(name = "Просмотр изображения", showBackground = true, widthDp = 360, heightDp = 800)
 @Composable
