@@ -1,8 +1,10 @@
 package com.example.simpleapp
 
 import android.content.Context
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -14,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.example.simpleapp.data.AppIntents
 import com.example.simpleapp.data.GalleryRepository
 import com.example.simpleapp.data.ImageDecoder
 import com.example.simpleapp.data.ImageItem
@@ -70,7 +73,8 @@ class ViewerActivity : ComponentActivity() {
                         onToggleFavorite = { image ->
                             preferences.toggleFavorite(image.id)
                             favoriteIds = preferences.favoriteIds
-                        }
+                        },
+                        onShare = { image -> shareImage(image) },
                     )
                 }
             }
@@ -80,6 +84,19 @@ class ViewerActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         ImageDecoder.clearCache()
+    }
+
+    private fun shareImage(image: ImageItem) {
+        val intent = AppIntents.buildShareIntent(
+            context = this,
+            image = image,
+            chooserTitle = getString(R.string.share_chooser_title)
+        )
+        try {
+            startActivity(intent)
+        } catch (error: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.share_error, Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {

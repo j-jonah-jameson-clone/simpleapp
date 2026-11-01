@@ -70,6 +70,7 @@ import com.example.simpleapp.data.formatResolution
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.filled.Share
 
 private val ViewerBackground = Color(0xFF101012)
 
@@ -83,6 +84,7 @@ fun ViewerScreen(
     favoriteIds: Set<Long>,
     onBack: () -> Unit,
     onToggleFavorite: (ImageItem) -> Unit,
+    onShare: (ImageItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(
@@ -152,6 +154,13 @@ fun ViewerScreen(
                             if (isFavorite) R.string.viewer_favorite_remove
                             else R.string.viewer_favorite_add
                         ),
+                        tint = Color.White
+                    )
+                }
+                IconButton(onClick = { onShare(current) }) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = stringResource(R.string.share_chooser_title),
                         tint = Color.White
                     )
                 }
@@ -356,7 +365,8 @@ private fun ViewerScreenPreview() {
             startIndex = 0,
             favoriteIds = emptySet(),
             onBack = {},
-            onToggleFavorite = {}
+            onToggleFavorite = {},
+            onShare = {}
         )
     }
 }

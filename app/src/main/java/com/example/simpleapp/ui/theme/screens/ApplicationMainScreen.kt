@@ -1,8 +1,5 @@
 package com.example.simpleapp.ui.theme.screens
 
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -27,12 +24,12 @@ import com.example.simpleapp.data.ImageItem
 import com.example.simpleapp.data.MediaPermissions
 import com.example.simpleapp.ui.theme.screens.components.AppBottomBar
 import com.example.simpleapp.ui.theme.screens.components.AppTopBar
-import com.example.simpleapp.ui.theme.screens.components.FavoritesEmptyState
 import com.example.simpleapp.ui.theme.screens.components.LoadingState
 import com.example.simpleapp.ui.theme.screens.components.PermissionRequiredState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.example.simpleapp.data.SettingsStore
+import com.example.simpleapp.data.AppIntents
 
 @Composable
 fun ApplicationMainScreen(modifier: Modifier = Modifier) {
@@ -89,14 +86,7 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         viewerLauncher.launch(ViewerActivity.createIntent(context, list, item.id))
     }
 
-    val openAppSettings: () -> Unit = {
-        context.startActivity(
-            Intent(
-                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.fromParts("package", context.packageName, null)
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        )
-    }
+    val openAppSettings: () -> Unit = { AppIntents.openAppSettings(context) }
 
     if (!hasPermission) {
         MainStateScaffold(

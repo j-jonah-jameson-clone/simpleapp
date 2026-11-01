@@ -57,6 +57,9 @@
     <string name="info_focal_length">Фокусное расстояние</string>
     <string name="info_unknown">—</string>
 
+    <string name="share_chooser_title">Поделиться изображением</string>
+    <string name="share_error">Не удалось поделиться изображением</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>
