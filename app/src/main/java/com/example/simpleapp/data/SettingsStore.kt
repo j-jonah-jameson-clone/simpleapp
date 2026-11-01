@@ -17,6 +17,16 @@ class SettingsStore(context: Context) {
             value.coerceIn(MIN_GRID_COLUMNS, MAX_GRID_COLUMNS).toString()
         )
 
+    var sortOrder: ImageSortOrder
+        get() = readString(KEY_SORT_ORDER)
+            ?.let { stored -> ImageSortOrder.entries.firstOrNull { it.name == stored } }
+            ?: DEFAULT_SORT_ORDER
+        set(value) = writeValue(KEY_SORT_ORDER, value.name)
+
+    var selectedFolderId: Long
+        get() = readLong(KEY_FOLDER_ID, GalleryRepository.ALL_FOLDERS_ID)
+        set(value) = writeValue(KEY_FOLDER_ID, value.toString())
+
     val favoriteIds: Set<Long>
         get() = database.query(
             SettingsDatabase.TABLE_FAVORITES,
@@ -68,6 +78,9 @@ class SettingsStore(context: Context) {
     private fun readInt(key: String, defaultValue: Int): Int =
         readString(key)?.toIntOrNull() ?: defaultValue
 
+    private fun readLong(key: String, defaultValue: Long): Long =
+        readString(key)?.toLongOrNull() ?: defaultValue
+
     private fun readString(key: String): String? =
         database.query(
             SettingsDatabase.TABLE_SETTINGS,
@@ -95,5 +108,8 @@ class SettingsStore(context: Context) {
         const val MIN_GRID_COLUMNS = 2
         const val MAX_GRID_COLUMNS = 5
         const val DEFAULT_GRID_COLUMNS = 3
+        private const val KEY_SORT_ORDER = "sort_order"
+        private const val KEY_FOLDER_ID = "folder_id"
+        val DEFAULT_SORT_ORDER = ImageSortOrder.DATE_DESC
     }
 }

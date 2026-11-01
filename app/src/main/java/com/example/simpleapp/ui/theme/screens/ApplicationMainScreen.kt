@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.example.simpleapp.R
 import com.example.simpleapp.SettingsActivity
 import com.example.simpleapp.ViewerActivity
 import com.example.simpleapp.data.GalleryRepository
@@ -39,6 +40,8 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.GALLERY) }
     var gridColumns by remember { mutableIntStateOf(preferences.gridColumns) }
     var favoriteIds by remember { mutableStateOf(preferences.favoriteIds) }
+    var sortOrder by remember { mutableStateOf(preferences.sortOrder) }
+    var selectedFolderId by remember { mutableStateOf(preferences.selectedFolderId) }
 
     var images by remember { mutableStateOf<List<ImageItem>?>(null) }
     var hasPermission by remember { mutableStateOf(MediaPermissions.isGranted(context)) }
@@ -57,7 +60,22 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         images?.let { GalleryRepository.filterFavorites(it, favoriteIds) }.orEmpty()
     }
 
-    val galleryImages = images.orEmpty()
+    val allFoldersName = stringResource(R.string.folder_all)
+    val unknownFolderName = stringResource(R.string.unknown_folder)
+
+    val folders = remember(images, allFoldersName, unknownFolderName) {
+        images?.let {
+            GalleryRepository.loadImagesByFolder(
+                images = it,
+                allFoldersName = allFoldersName,
+                unknownFolderName = unknownFolderName
+            )
+        }.orEmpty()
+    }
+
+    val galleryImages = remember(images, sortOrder, selectedFolderId) {
+        images?.let { sortOrder.apply(GalleryRepository.filterByFolder(it, selectedFolderId)) }.orEmpty()
+    }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
@@ -70,6 +88,8 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
         gridColumns = preferences.gridColumns
+        sortOrder = preferences.sortOrder
+        selectedFolderId = preferences.selectedFolderId
     }
 
     val openSettings: () -> Unit = {
@@ -117,9 +137,20 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
 
     when (selectedTab) {
         MainTab.GALLERY -> GalleryScreen(
-            images = images.orEmpty(),
+            images = galleryImages,
+            folders = folders,
             favoriteIds = favoriteIds,
             gridColumns = gridColumns,
+            sortOrder = sortOrder,
+            selectedFolderId = selectedFolderId,
+            onSortOrderChange = { order ->
+                preferences.sortOrder = order
+                sortOrder = order
+            },
+            onFolderChange = { folderId ->
+                preferences.selectedFolderId = folderId
+                selectedFolderId = folderId
+            },
             onOpenImage = { item -> openImage(galleryImages, item) },
             onSettingsClick = openSettings,
             onTabSelected = { selectedTab = it },

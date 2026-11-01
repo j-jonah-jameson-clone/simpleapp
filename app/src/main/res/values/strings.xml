@@ -60,6 +60,17 @@
     <string name="share_chooser_title">Поделиться изображением</string>
     <string name="share_error">Не удалось поделиться изображением</string>
 
+    <string name="menu_sort">Сортировка</string>
+    <string name="menu_folder">Папка</string>
+
+    <string name="sort_date_desc">Сначала новые</string>
+    <string name="sort_date_asc">Сначала старые</string>
+    <string name="sort_size_desc">Сначала большие</string>
+    <string name="sort_size_asc">Сначала маленькие</string>
+
+    <string name="folder_all">Все папки</string>
+    <string name="unknown_folder">Без папки</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>

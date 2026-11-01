@@ -117,4 +117,28 @@ object GalleryRepository {
         if (favoriteIds.isEmpty()) return emptyList()
         return images.filter { it.id in favoriteIds }
     }
+
+    fun loadImagesByFolder(
+        images: List<ImageItem>,
+        allFoldersName: String,
+        unknownFolderName: String
+    ): List<ImageFolder> {
+        val folders = images
+            .groupBy { it.folderId }
+            .map { (folderId, folderImages) ->
+                ImageFolder(
+                    id = folderId,
+                    name = folderImages.first().folderPath.ifBlank { unknownFolderName },
+                    count = folderImages.size
+                )
+            }
+            .sortedBy { it.name }
+
+        return listOf(
+            ImageFolder(id = ALL_FOLDERS_ID, name = allFoldersName, count = images.size)
+        ) + folders
+    }
+
+    fun filterByFolder(images: List<ImageItem>, folderId: Long): List<ImageItem> =
+        if (folderId == ALL_FOLDERS_ID) images else images.filter { it.folderId == folderId }
 }
