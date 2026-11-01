@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.example.simpleapp.data.ImageDecoder
 import com.example.simpleapp.data.ImageItem
+import androidx.compose.material.icons.filled.CheckCircle
 
 private const val THUMBNAIL_TARGET_DP = 320
 
@@ -37,6 +38,7 @@ private const val THUMBNAIL_TARGET_DP = 320
 fun ImageThumbnail(
     item: ImageItem,
     modifier: Modifier = Modifier,
+    selected: Boolean = false,
     isFavorite: Boolean = false,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {}
@@ -89,6 +91,22 @@ fun ImageThumbnail(
                     .padding(4.dp)
                     .size(16.dp)
                     .background(Color.White.copy(alpha = 0.75f), CircleShape)
+            )
+        }
+        if (selected) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.35f))
+            )
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(4.dp)
+                    .size(20.dp)
             )
         }
     }

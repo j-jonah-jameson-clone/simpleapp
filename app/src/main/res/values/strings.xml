@@ -71,10 +71,25 @@
     <string name="folder_all">Все папки</string>
     <string name="unknown_folder">Без папки</string>
 
+    <string name="selected_count">Выбрано: %1$d</string>
+    <string name="action_select_all">Выбрать все</string>
+    <string name="delete_confirm_title">Удалить изображения?</string>
+    <string name="delete_error_title">Не удалось удалить</string>
+    <string name="delete_error">Изображение не было удалено. Возможно, доступ к нему уже закрыт или файл удалён другим приложением.</string>
+
+    <string name="action_delete">Удалить</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>
         <item quantity="many">%d колонок</item>
         <item quantity="other">%d колонки</item>
+    </plurals>
+
+    <plurals name="delete_confirm_message">
+        <item quantity="one">Будет удалён %1$d файл. Это действие нельзя отменить.</item>
+        <item quantity="few">Будет удалено %1$d файла. Это действие нельзя отменить.</item>
+        <item quantity="many">Будет удалено %1$d файлов. Это действие нельзя отменить.</item>
+        <item quantity="other">Будет удалено %1$d файла. Это действие нельзя отменить.</item>
     </plurals>
 </resources>

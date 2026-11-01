@@ -21,6 +21,7 @@ fun ImageGrid(
     onImageClick: (ImageItem) -> Unit,
     onImageLongClick: (ImageItem) -> Unit,
     modifier: Modifier = Modifier,
+    selectedIds: Set<Long> = emptySet(),
     contentPadding: PaddingValues = PaddingValues(GRID_PADDING)
 ) {
     LazyVerticalGrid(
@@ -34,6 +35,7 @@ fun ImageGrid(
             ImageThumbnail(
                 item = item,
                 modifier = Modifier,
+                selected = item.id in selectedIds,
                 isFavorite = item.id in favoriteIds,
                 onClick = { onImageClick(item) },
                 onLongClick = { onImageLongClick(item) }

@@ -151,6 +151,11 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
                 preferences.selectedFolderId = folderId
                 selectedFolderId = folderId
             },
+            onImagesDeleted = { removedIds ->
+                preferences.forgetFavorites(removedIds)
+                favoriteIds = preferences.favoriteIds
+                reloadKey++
+            },
             onOpenImage = { item -> openImage(galleryImages, item) },
             onSettingsClick = openSettings,
             onTabSelected = { selectedTab = it },
