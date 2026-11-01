@@ -71,6 +71,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.graphics.ColorFilter
+import com.example.simpleapp.data.PhotoFilter
 
 private val ViewerBackground = Color(0xFF101012)
 
@@ -95,6 +105,9 @@ fun ViewerScreen(
     var showInfo by remember { mutableStateOf(false) }
     var details by remember(current.id) { mutableStateOf<ImageDetails?>(null) }
     val context = LocalContext.current
+    var filter by rememberSaveable { mutableStateOf(PhotoFilter.ORIGINAL) }
+    var showFilters by remember { mutableStateOf(false) }
+
     LaunchedEffect(showInfo, current.id) {
         if (showInfo && details == null) {
             details = ExifReader.loadDetails(context, current)
@@ -116,6 +129,7 @@ fun ViewerScreen(
             ViewerPage(
                 image = images[page],
                 isCurrent = page == pagerState.currentPage,
+                filter = filter,
                 onZoomChange = { isZoomed = it }
             )
         }
@@ -157,6 +171,13 @@ fun ViewerScreen(
                         tint = Color.White
                     )
                 }
+                IconButton(onClick = { showFilters = !showFilters }) {
+                    Icon(
+                        imageVector = Icons.Default.Tune,
+                        contentDescription = stringResource(R.string.action_filters),
+                        tint = Color.White
+                    )
+                }
                 IconButton(onClick = { onShare(current) }) {
                     Icon(
                         imageVector = Icons.Default.Share,
@@ -176,6 +197,15 @@ fun ViewerScreen(
                 containerColor = Color.Black.copy(alpha = 0.4f)
             )
         )
+        if (showFilters) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+            ) {
+                FilterRow(selected = filter, onSelect = { filter = it })
+            }
+        }
     }
 }
 
@@ -183,6 +213,7 @@ fun ViewerScreen(
 private fun ViewerPage(
     image: ImageItem,
     isCurrent: Boolean,
+    filter: PhotoFilter,
     onZoomChange: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -213,6 +244,7 @@ private fun ViewerPage(
                 bitmap = shownBitmap.asImageBitmap(),
                 contentDescription = image.name,
                 contentScale = ContentScale.Fit,
+                colorFilter = filter.colorMatrix?.let { ColorFilter.colorMatrix(it) },
                 modifier = Modifier
                     .fillMaxSize()
                     .graphicsLayer(
@@ -322,6 +354,36 @@ private fun ImageInfoDialog(
             }
         }
     )
+}
+
+@Composable
+private fun FilterRow(
+    selected: PhotoFilter,
+    onSelect: (PhotoFilter) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyRow(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.Black.copy(alpha = 0.4f))
+            .padding(vertical = 8.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(items = PhotoFilter.entries, key = { it.name }) { item ->
+            FilterChip(
+                selected = item == selected,
+                onClick = { onSelect(item) },
+                label = { Text(stringResource(item.titleRes)) },
+                colors = FilterChipDefaults.filterChipColors(
+                    containerColor = Color.White.copy(alpha = 0.15f),
+                    labelColor = Color.White,
+                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedLabelColor = Color.White
+                )
+            )
+        }
+    }
 }
 
 @Composable

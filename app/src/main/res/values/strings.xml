@@ -79,6 +79,12 @@
 
     <string name="action_delete">Удалить</string>
 
+    <string name="action_filters">Фильтры</string>
+    <string name="filter_none">Оригинал</string>
+    <string name="filter_film">Плёночный</string>
+    <string name="filter_portrait">Портретный</string>
+    <string name="filter_mono">Чёрно-белый</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>
