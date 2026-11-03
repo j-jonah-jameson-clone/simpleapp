@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import android.graphics.Matrix
 import android.media.ExifInterface
+import android.util.Log
 
 object ImageDecoder {
 
@@ -30,11 +31,19 @@ object ImageDecoder {
         val key = "${item.id}:$targetSize"
         cache.get(key)?.let { return@withContext it }
 
-        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val fromSystemCache = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             decodeWithThumbnailApi(context, item, targetSize)
         } else {
             null
-        } ?: decodeWithBitmapFactory(context, item, targetSize)
+        }
+
+        val usable = fromSystemCache != null && fromSystemCache.width >= targetSize * 0.75
+
+        val bitmap = if (usable) {
+            fromSystemCache
+        } else {
+            decodeWithBitmapFactory(context, item, targetSize)
+        }
 
         if (bitmap != null) cache.put(key, bitmap)
         bitmap
