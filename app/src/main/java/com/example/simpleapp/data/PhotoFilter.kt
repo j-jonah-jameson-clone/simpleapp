@@ -6,16 +6,19 @@ import com.example.simpleapp.R
 
 enum class PhotoFilter(
     @StringRes val titleRes: Int,
-    private val matrix: FloatArray?
+    private val matrix: FloatArray?,
+    val fileNameSuffix: String
 ) {
 
     ORIGINAL(
         titleRes = R.string.filter_none,
-        matrix = null
+        matrix = null,
+        fileNameSuffix = "original"
     ),
 
     FILM(
         titleRes = R.string.filter_film,
+        fileNameSuffix = "film",
         matrix = floatArrayOf(
             0.79f, 0.27f, 0.07f, 0f, 8f,
             0.12f, 0.89f, 0.06f, 0f, 4f,
@@ -26,6 +29,7 @@ enum class PhotoFilter(
 
     PORTRAIT(
         titleRes = R.string.filter_portrait,
+        fileNameSuffix = "portrait",
         matrix = floatArrayOf(
             1.08f, 0.02f, 0f, 0f, 4f,
             0.01f, 1.05f, 0.01f, 0f, -4f,
@@ -36,6 +40,7 @@ enum class PhotoFilter(
 
     MONOCHROME(
         titleRes = R.string.filter_mono,
+        fileNameSuffix = "mono",
         matrix = floatArrayOf(
             0.344f, 0.675f, 0.131f, 0f, -19f,
             0.344f, 0.675f, 0.131f, 0f, -19f,
@@ -45,4 +50,8 @@ enum class PhotoFilter(
     );
 
     val colorMatrix: ColorMatrix? = matrix?.let(::ColorMatrix)
+
+    fun matrixValues(): FloatArray? = matrix?.copyOf()
+
+    val hasEffect: Boolean get() = matrix != null
 }

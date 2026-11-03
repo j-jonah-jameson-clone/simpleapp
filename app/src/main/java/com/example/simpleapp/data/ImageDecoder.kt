@@ -9,9 +9,12 @@ import android.util.Size
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import android.graphics.Matrix
+import android.media.ExifInterface
 
 object ImageDecoder {
 
+    private const val MAX_FULL_SIZE = 4096
     private val cache: LruCache<String, Bitmap> by lazy {
         val maxMemoryKb = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         object : LruCache<String, Bitmap>(maxMemoryKb / 8) {
@@ -37,6 +40,16 @@ object ImageDecoder {
         bitmap
     }
 
+    suspend fun decodeFullSize(context: Context, item: ImageItem): Bitmap? =
+        withContext(Dispatchers.IO) {
+            decodeWithBitmapFactory(
+                context = context,
+                item = item,
+                targetSize = MAX_FULL_SIZE,
+                config = Bitmap.Config.ARGB_8888
+            )
+        }
+
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun decodeWithThumbnailApi(
         context: Context,
@@ -55,7 +68,8 @@ object ImageDecoder {
     private fun decodeWithBitmapFactory(
         context: Context,
         item: ImageItem,
-        targetSize: Int
+        targetSize: Int,
+        config: Bitmap.Config = Bitmap.Config.RGB_565
     ): Bitmap? {
         val resolver = context.applicationContext.contentResolver
 
@@ -71,10 +85,47 @@ object ImageDecoder {
                 sourceHeight = bounds.outHeight,
                 targetSize = targetSize
             )
-            inPreferredConfig = Bitmap.Config.RGB_565
+            inPreferredConfig = config
         }
-        return resolver.openInputStream(item.uri)?.use { stream ->
+        val decoded = resolver.openInputStream(item.uri)?.use { stream ->
             BitmapFactory.decodeStream(stream, null, options)
+        } ?: return null
+
+        return applyExifOrientation(context, item, decoded)
+    }
+
+    private fun applyExifOrientation(
+        context: Context,
+        item: ImageItem,
+        bitmap: Bitmap
+    ): Bitmap {
+        val orientation = try {
+            context.contentResolver.openInputStream(item.uri)?.use { stream ->
+                ExifInterface(stream).getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL
+                )
+            }
+        } catch (error: Exception) {
+            null
+        } ?: return bitmap
+
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.postScale(-1f, 1f)
+            ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.postScale(1f, -1f)
+            else -> return bitmap
+        }
+
+        return try {
+            val rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            if (rotated !== bitmap) bitmap.recycle()
+            rotated
+        } catch (error: Exception) {
+            bitmap
         }
     }
 
