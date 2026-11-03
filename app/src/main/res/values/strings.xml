@@ -85,6 +85,11 @@
     <string name="filter_portrait">Портретный</string>
     <string name="filter_mono">Чёрно-белый</string>
 
+    <string name="action_save_filtered">Сохранить копию</string>
+    <string name="save_success">Сохранено: %1$s</string>
+    <string name="save_error">Не удалось сохранить копию</string>
+    <string name="filter_album_name">Фильтры</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>

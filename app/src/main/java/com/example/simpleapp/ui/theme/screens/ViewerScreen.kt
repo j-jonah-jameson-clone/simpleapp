@@ -81,10 +81,28 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.graphics.ColorFilter
 import com.example.simpleapp.data.PhotoFilter
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.rememberCoroutineScope
+import com.example.simpleapp.data.FilteredImageSaver
+import kotlinx.coroutines.launch
 
 private val ViewerBackground = Color(0xFF101012)
 
 private const val MAX_SCALE = 5f
+
+private sealed interface SaveState {
+
+    data object InProgress : SaveState
+
+    data class Saved(val fileName: String) : SaveState
+
+    data object Failed : SaveState
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,6 +113,7 @@ fun ViewerScreen(
     onBack: () -> Unit,
     onToggleFavorite: (ImageItem) -> Unit,
     onShare: (ImageItem) -> Unit,
+    onCopySaved: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(
@@ -102,11 +121,24 @@ fun ViewerScreen(
     ) { images.size }
 
     val current = images[pagerState.currentPage]
+
     var showInfo by remember { mutableStateOf(false) }
+
     var details by remember(current.id) { mutableStateOf<ImageDetails?>(null) }
+
     val context = LocalContext.current
+
     var filter by rememberSaveable { mutableStateOf(PhotoFilter.ORIGINAL) }
+
     var showFilters by remember { mutableStateOf(false) }
+
+    var saveState by remember { mutableStateOf<SaveState?>(null) }
+
+    val scope = rememberCoroutineScope()
+
+    val albumName = stringResource(R.string.filter_album_name)
+
+    LaunchedEffect(filter, current.id) { saveState = null }
 
     LaunchedEffect(showInfo, current.id) {
         if (showInfo && details == null) {
@@ -203,6 +235,28 @@ fun ViewerScreen(
                     .align(Alignment.BottomCenter)
                     .windowInsetsPadding(WindowInsets.navigationBars)
             ) {
+                if (filter.hasEffect) {
+                    SaveFilteredBar(
+                        state = saveState,
+                        onSave = {
+                            saveState = SaveState.InProgress
+                            scope.launch {
+                                val saved = FilteredImageSaver.saveCopy(
+                                    context = context,
+                                    source = current,
+                                    filter = filter,
+                                    albumName = albumName
+                                )
+                                saveState = if (saved == null) {
+                                    SaveState.Failed
+                                } else {
+                                    onCopySaved()
+                                    SaveState.Saved(saved)
+                                }
+                            }
+                        }
+                    )
+                }
                 FilterRow(selected = filter, onSelect = { filter = it })
             }
         }
@@ -404,6 +458,68 @@ private fun InfoRow(label: String, value: String) {
         )
     }
 }
+
+@Composable
+private fun SaveFilteredBar(
+    state: SaveState?,
+    onSave: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val saving = state is SaveState.InProgress
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        when (state) {
+            is SaveState.Saved -> SaveMessage(
+                text = stringResource(R.string.save_success, state.fileName),
+                container = MaterialTheme.colorScheme.primary
+            )
+
+            SaveState.Failed -> SaveMessage(
+                text = stringResource(R.string.save_error),
+                container = MaterialTheme.colorScheme.error
+            )
+
+            else -> Unit
+        }
+
+        FilledTonalButton(onClick = onSave, enabled = !saving) {
+            if (saving) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Save,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = stringResource(R.string.action_save_filtered))
+        }
+    }
+}
+
+@Composable
+private fun SaveMessage(text: String, container: Color) {
+    Surface(color = container, shape = MaterialTheme.shapes.small) {
+        Text(
+            text = text,
+            color = Color.White,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+        )
+    }
+}
+
 
 @Preview(name = "Просмотр изображения", showBackground = true, widthDp = 360, heightDp = 800)
 @Composable

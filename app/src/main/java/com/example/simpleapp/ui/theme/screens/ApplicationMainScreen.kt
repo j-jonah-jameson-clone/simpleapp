@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.example.simpleapp.data.SettingsStore
 import com.example.simpleapp.data.AppIntents
+import android.app.Activity
 
 @Composable
 fun ApplicationMainScreen(modifier: Modifier = Modifier) {
@@ -98,8 +99,9 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
 
     val viewerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
-    ) {
+    ) { result ->
         favoriteIds = preferences.favoriteIds
+        if (result.resultCode == Activity.RESULT_OK) reloadKey++
     }
 
     val openImage: (List<ImageItem>, ImageItem) -> Unit = { list, item ->

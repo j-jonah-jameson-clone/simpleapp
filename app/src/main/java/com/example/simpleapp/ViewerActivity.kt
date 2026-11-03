@@ -75,6 +75,7 @@ class ViewerActivity : ComponentActivity() {
                             favoriteIds = preferences.favoriteIds
                         },
                         onShare = { image -> shareImage(image) },
+                        onCopySaved = { setResult(RESULT_OK) },
                     )
                 }
             }
