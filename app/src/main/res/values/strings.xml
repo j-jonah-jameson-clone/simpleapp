@@ -1,3 +1,106 @@
 <resources>
-    <string name="app_name">simpleapp</string>
+    <string name="app_name">Галерея</string>
+
+    <string name="title_gallery">Галерея</string>
+    <string name="title_favorites">Избранное</string>
+    <string name="title_settings">Настройки</string>
+
+    <string name="action_back">Назад</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_retry">Обновить</string>
+    <string name="action_grant">Разрешить доступ</string>
+    <string name="action_open_settings">Открыть настройки</string>
+    <string name="action_info">Сведения о фото</string>
+    <string name="action_close">Закрыть</string>
+
+    <string name="permission_title">Нет доступа к изображениям</string>
+    <string name="permission_message">Чтобы показать галерею, приложению нужен доступ к изображениям на устройстве. Изображения не копируются и не изменяются приложением.</string>    <string name="loading">Загрузка…</string>
+    <string name="empty_gallery">Изображения не найдены</string>
+    <string name="empty_gallery_hint">В памяти устройства нет изображений, доступных приложению.</string>
+    <string name="empty_favorites">Нет избранных изображений</string>
+    <string name="empty_favorites_hint">Откройте изображение и нажмите «В избранное».</string>
+
+    <string name="settings_theme">Тема оформления</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="theme_system">Системная</string>
+    <string name="settings_language">Язык интерфейса</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_en">English</string>
+    <string name="settings_grid">Размер сетки</string>
+    <string name="settings_about">О приложении</string>
+    <string name="about_version">Версия</string>
+    <string name="about_developer">Разработчик</string>
+    <string name="about_developer_name">Гончаров Т.С.</string>
+    <string name="about_version_value">1.0.0</string>
+    <string name="settings_fixed_hint">Пока доступен один вариант. Остальные появятся в следующих версиях.</string>
+
+    <string name="action_remove_favorite">Убрать</string>
+    <string name="favorite_remove_title">Убрать из избранного?</string>
+    <string name="favorite_remove_message">Изображение «%1$s» больше не будет показываться во вкладке «Избранное». Сам файл останется в памяти устройства.</string>
+
+    <string name="viewer_favorite_add">Добавить в избранное</string>
+    <string name="viewer_favorite_remove">Убрать из избранного</string>
+
+    <string name="info_title">Сведения о фото</string>
+    <string name="info_name">Имя файла</string>
+    <string name="info_date">Дата съёмки</string>
+    <string name="info_resolution">Разрешение</string>
+    <string name="info_size">Размер</string>
+    <string name="info_format">Формат</string>
+    <string name="info_folder">Папка</string>
+    <string name="info_camera">Камера</string>
+    <string name="info_iso">ISO</string>
+    <string name="info_exposure">Выдержка</string>
+    <string name="info_aperture">Диафрагма</string>
+    <string name="info_focal_length">Фокусное расстояние</string>
+    <string name="info_unknown">—</string>
+
+    <string name="share_chooser_title">Поделиться изображением</string>
+    <string name="share_error">Не удалось поделиться изображением</string>
+
+    <string name="menu_sort">Сортировка</string>
+    <string name="menu_folder">Папка</string>
+
+    <string name="sort_date_desc">Сначала новые</string>
+    <string name="sort_date_asc">Сначала старые</string>
+    <string name="sort_size_desc">Сначала большие</string>
+    <string name="sort_size_asc">Сначала маленькие</string>
+
+    <string name="folder_all">Все папки</string>
+    <string name="unknown_folder">Без папки</string>
+
+    <string name="selected_count">Выбрано: %1$d</string>
+    <string name="action_select_all">Выбрать все</string>
+    <string name="delete_confirm_title">Удалить изображения?</string>
+    <string name="delete_error_title">Не удалось удалить</string>
+    <string name="delete_error">Изображение не было удалено. Возможно, доступ к нему уже закрыт или файл удалён другим приложением.</string>
+
+    <string name="action_delete">Удалить</string>
+
+    <string name="action_filters">Фильтры</string>
+    <string name="filter_none">Оригинал</string>
+    <string name="filter_film">Плёночный</string>
+    <string name="filter_portrait">Портретный</string>
+    <string name="filter_mono">Чёрно-белый</string>
+
+    <string name="action_save_filtered">Сохранить копию</string>
+    <string name="save_success">Сохранено: %1$s</string>
+    <string name="save_error">Не удалось сохранить копию</string>
+    <string name="filter_album_name">Фильтры</string>
+
+    <plurals name="grid_columns_value">
+        <item quantity="one">%d колонка</item>
+        <item quantity="few">%d колонки</item>
+        <item quantity="many">%d колонок</item>
+        <item quantity="other">%d колонки</item>
+    </plurals>
+
+    <plurals name="delete_confirm_message">
+        <item quantity="one">Будет удалён %1$d файл. Это действие нельзя отменить.</item>
+        <item quantity="few">Будет удалено %1$d файла. Это действие нельзя отменить.</item>
+        <item quantity="many">Будет удалено %1$d файлов. Это действие нельзя отменить.</item>
+        <item quantity="other">Будет удалено %1$d файла. Это действие нельзя отменить.</item>
+    </plurals>
 </resources>
