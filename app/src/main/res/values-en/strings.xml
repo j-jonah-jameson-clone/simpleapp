@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gallery</string>
+
+    <string name="title_gallery">Gallery</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_settings">Settings</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_retry">Refresh</string>
+    <string name="action_grant">Allow access</string>
+    <string name="action_open_settings">Open settings</string>
+    <string name="action_info">Photo details</string>
+    <string name="action_close">Close</string>
+
+    <string name="permission_title">No access to images</string>
+    <string name="permission_message">To show the gallery, the app needs access to images on your device. Images are not copied or modified by the app.</string>
+    <string name="loading">Loading…</string>
+    <string name="empty_gallery">No images found</string>
+    <string name="empty_gallery_hint">There are no images on your device available to the app.</string>
+    <string name="empty_favorites">No favorite images</string>
+    <string name="empty_favorites_hint">Open an image and tap “Add to favorites”.</string>
+
+    <string name="settings_theme">Appearance</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+    <string name="settings_language">Language</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_en">English</string>
+    <string name="settings_grid">Grid size</string>
+    <string name="settings_about">About</string>
+    <string name="about_version">Version</string>
+    <string name="about_developer">Developer</string>
+    <string name="about_developer_name">Goncharov T.S.</string>
+    <string name="about_version_value">1.0.0</string>
+
+    <string name="action_remove_favorite">Remove</string>
+    <string name="favorite_remove_title">Remove from favorites?</string>
+    <string name="favorite_remove_message">The image “%1$s” will no longer appear in the Favorites tab. The file itself stays on your device.</string>
+
+    <string name="viewer_favorite_add">Add to favorites</string>
+    <string name="viewer_favorite_remove">Remove from favorites</string>
+
+    <string name="info_title">Photo details</string>
+    <string name="info_name">File name</string>
+    <string name="info_date">Date taken</string>
+    <string name="info_resolution">Resolution</string>
+    <string name="info_size">Size</string>
+    <string name="info_format">Format</string>
+    <string name="info_folder">Folder</string>
+    <string name="info_camera">Camera</string>
+    <string name="info_iso">ISO</string>
+    <string name="info_exposure">Shutter speed</string>
+    <string name="info_aperture">Aperture</string>
+    <string name="info_focal_length">Focal length</string>
+    <string name="info_unknown">—</string>
+
+    <string name="share_chooser_title">Share image</string>
+    <string name="share_error">Could not share the image</string>
+
+    <string name="menu_sort">Sort</string>
+    <string name="menu_folder">Folder</string>
+
+    <string name="sort_date_desc">Newest first</string>
+    <string name="sort_date_asc">Oldest first</string>
+    <string name="sort_size_desc">Largest first</string>
+    <string name="sort_size_asc">Smallest first</string>
+
+    <string name="folder_all">All folders</string>
+    <string name="unknown_folder">No folder</string>
+
+    <string name="selected_count">Selected: %1$d</string>
+    <string name="action_select_all">Select all</string>
+    <string name="delete_confirm_title">Delete images?</string>
+    <string name="delete_error_title">Could not delete</string>
+    <string name="delete_error">The image was not deleted. Access to it may have been closed, or the file was deleted by another app.</string>
+
+    <string name="action_delete">Delete</string>
+
+    <string name="action_filters">Filters</string>
+    <string name="filter_none">Original</string>
+    <string name="filter_film">Film</string>
+    <string name="filter_portrait">Portrait</string>
+    <string name="filter_mono">Black and white</string>
+
+    <string name="action_save_filtered">Save copy</string>
+    <string name="save_success">Saved: %1$s</string>
+    <string name="save_error">Could not save the copy</string>
+    <string name="filter_album_name">Filters</string>
+
+    <plurals name="grid_columns_value">
+        <item quantity="one">%d column</item>
+        <item quantity="other">%d columns</item>
+    </plurals>
+
+    <plurals name="delete_confirm_message">
+        <item quantity="one">%1$d file will be deleted. This cannot be undone.</item>
+        <item quantity="other">%1$d files will be deleted. This cannot be undone.</item>
+    </plurals>
+</resources>

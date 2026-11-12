@@ -34,7 +34,6 @@
     <string name="about_developer">Разработчик</string>
     <string name="about_developer_name">Гончаров Т.С.</string>
     <string name="about_version_value">1.0.0</string>
-    <string name="settings_fixed_hint">Пока доступен один вариант. Остальные появятся в следующих версиях.</string>
 
     <string name="action_remove_favorite">Убрать</string>
     <string name="favorite_remove_title">Убрать из избранного?</string>

@@ -31,6 +31,10 @@ class SettingsStore(context: Context) {
         get() = ThemeMode.fromStorage(readString(KEY_THEME_MODE))
         set(value) = writeValue(KEY_THEME_MODE, value.storageValue)
 
+    var language: AppLanguage
+        get() = AppLanguage.fromStorage(readString(KEY_LANGUAGE))
+        set(value) = writeValue(KEY_LANGUAGE, value.storageValue)
+
     val favoriteIds: Set<Long>
         get() = database.query(
             SettingsDatabase.TABLE_FAVORITES,
@@ -116,5 +120,6 @@ class SettingsStore(context: Context) {
         private const val KEY_SORT_ORDER = "sort_order"
         private const val KEY_FOLDER_ID = "folder_id"
         val DEFAULT_SORT_ORDER = ImageSortOrder.DATE_DESC
+        private const val KEY_LANGUAGE = "language"
     }
 }

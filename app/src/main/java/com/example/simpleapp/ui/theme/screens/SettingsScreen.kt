@@ -15,7 +15,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -26,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +35,10 @@ import com.example.simpleapp.ui.theme.screens.components.SectionSpacer
 import com.example.simpleapp.ui.theme.screens.components.SectionTitle
 import com.example.simpleapp.data.ThemeMode
 import com.example.simpleapp.ui.theme.ThemeState
+import android.app.Activity
+import com.example.simpleapp.data.AppLanguage
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.res.pluralStringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +48,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val preferences = remember { SettingsStore(context) }
-
+    val currentLanguage = remember { SettingsStore(context).language }
     var gridColumns by remember { mutableIntStateOf(preferences.gridColumns) }
 
     Scaffold(
@@ -86,21 +88,22 @@ fun SettingsScreen(
 
             SectionSpacer()
 
+
             SectionTitle(stringResource(R.string.settings_language))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(
-                    selected = true,
-                    onClick = {},
-                    label = { Text(stringResource(R.string.language_ru)) }
-                )
-                FilterChip(
-                    selected = false,
-                    enabled = false,
-                    onClick = {},
-                    label = { Text(stringResource(R.string.language_en)) }
-                )
+                AppLanguage.entries.forEach { language ->
+                    FilterChip(
+                        selected = language == currentLanguage,
+                        onClick = {
+                            if (language != currentLanguage) {
+                                SettingsStore(context).language = language
+                                (context as? Activity)?.recreate()
+                            }
+                        },
+                        label = { Text(stringResource(language.titleRes())) }
+                    )
+                }
             }
-
 
             SectionSpacer()
 
@@ -155,4 +158,8 @@ private fun ThemeMode.titleRes(): Int = when (this) {
     ThemeMode.LIGHT -> R.string.theme_light
     ThemeMode.DARK -> R.string.theme_dark
     ThemeMode.SYSTEM -> R.string.theme_system
+}
+private fun AppLanguage.titleRes(): Int = when (this) {
+    AppLanguage.RUSSIAN -> R.string.language_ru
+    AppLanguage.ENGLISH -> R.string.language_en
 }
