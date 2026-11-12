@@ -26,6 +26,7 @@ import com.example.simpleapp.ui.theme.screens.ViewerLoading
 import com.example.simpleapp.ui.theme.screens.ViewerScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.example.simpleapp.ui.theme.ThemeState
 
 class ViewerActivity : ComponentActivity() {
 
@@ -44,9 +45,10 @@ class ViewerActivity : ComponentActivity() {
         }
 
         val preferences = SettingsStore(this)
+        ThemeState.load(this)
 
         setContent {
-            SimpleappTheme {
+            SimpleappTheme (styleSystemBars = false){
                 var images by remember { mutableStateOf<List<ImageItem>?>(null) }
                 var favoriteIds by remember { mutableStateOf(preferences.favoriteIds) }
 

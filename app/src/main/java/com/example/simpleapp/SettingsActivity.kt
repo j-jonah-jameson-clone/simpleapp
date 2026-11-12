@@ -11,10 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.example.simpleapp.ui.theme.SimpleappTheme
 import com.example.simpleapp.ui.theme.screens.SettingsScreen
+import com.example.simpleapp.ui.theme.ThemeState
 
 class SettingsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeState.load(this)
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
                 Color.Transparent.toArgb(),

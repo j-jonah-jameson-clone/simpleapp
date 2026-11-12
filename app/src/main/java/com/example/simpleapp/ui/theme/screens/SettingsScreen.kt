@@ -35,6 +35,8 @@ import com.example.simpleapp.data.SettingsStore
 import com.example.simpleapp.ui.theme.SimpleappTheme
 import com.example.simpleapp.ui.theme.screens.components.SectionSpacer
 import com.example.simpleapp.ui.theme.screens.components.SectionTitle
+import com.example.simpleapp.data.ThemeMode
+import com.example.simpleapp.ui.theme.ThemeState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,29 +75,14 @@ fun SettingsScreen(
         ) {
             SectionTitle(stringResource(R.string.settings_theme))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(
-                    selected = true,
-                    onClick = {},
-                    label = { Text(stringResource(R.string.theme_light)) }
-                )
-                FilterChip(
-                    selected = false,
-                    enabled = false,
-                    onClick = {},
-                    label = { Text(stringResource(R.string.theme_dark)) }
-                )
-                FilterChip(
-                    selected = false,
-                    enabled = false,
-                    onClick = {},
-                    label = { Text(stringResource(R.string.theme_system)) }
-                )
+                ThemeMode.entries.forEach { mode ->
+                    FilterChip(
+                        selected = mode == ThemeState.mode,
+                        onClick = { ThemeState.update(context, mode) },
+                        label = { Text(stringResource(mode.titleRes())) }
+                    )
+                }
             }
-            Text(
-                text = stringResource(R.string.settings_fixed_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
 
             SectionSpacer()
 
@@ -113,11 +100,7 @@ fun SettingsScreen(
                     label = { Text(stringResource(R.string.language_en)) }
                 )
             }
-            Text(
-                text = stringResource(R.string.settings_fixed_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+
 
             SectionSpacer()
 
@@ -167,4 +150,9 @@ private fun SettingsScreenPreview() {
     SimpleappTheme {
         SettingsScreen(onBack = {})
     }
+}
+private fun ThemeMode.titleRes(): Int = when (this) {
+    ThemeMode.LIGHT -> R.string.theme_light
+    ThemeMode.DARK -> R.string.theme_dark
+    ThemeMode.SYSTEM -> R.string.theme_system
 }
