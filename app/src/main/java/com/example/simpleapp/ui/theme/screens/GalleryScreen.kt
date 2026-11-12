@@ -50,8 +50,8 @@ import com.example.simpleapp.ui.theme.screens.components.rememberSelectionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.simpleapp.ui.theme.screens.components.FolderPickerDialog
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryScreen(
     images: List<ImageItem>,
@@ -66,6 +66,7 @@ fun GalleryScreen(
     onSettingsClick: () -> Unit,
     onImagesDeleted: (List<Long>) -> Unit,
     onTabSelected: (MainTab) -> Unit,
+    onImagesAddedToFolder: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -75,6 +76,7 @@ fun GalleryScreen(
 
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showDeleteError by remember { mutableStateOf(false) }
+    var showFolderPicker by remember { mutableStateOf(false) }
 
     var pendingDeleteIds by remember { mutableStateOf<List<Long>>(emptyList()) }
 
@@ -128,6 +130,7 @@ fun GalleryScreen(
                     selectedCount = selection.count,
                     onBack = { selection.clear() },
                     onSelectAll = { selection.selectAll(images.map { it.id }) },
+                    onAddToFolderClick = { showFolderPicker = true },
                     onDeleteClick = { showDeleteDialog = true }
                 )
             } else {
@@ -210,6 +213,17 @@ fun GalleryScreen(
                 TextButton(onClick = { showDeleteError = false }) {
                     Text(stringResource(R.string.action_close))
                 }
+            }
+        )
+    }
+    if (showFolderPicker) {
+        val selectedIds = selection.ids.toList()
+        FolderPickerDialog(
+            imageIds = selectedIds,
+            titleRes = R.string.action_add_to_folder,
+            onDismiss = {
+                showFolderPicker = false
+                onImagesAddedToFolder()
             }
         )
     }

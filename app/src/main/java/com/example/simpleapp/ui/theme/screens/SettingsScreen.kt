@@ -39,6 +39,10 @@ import android.app.Activity
 import com.example.simpleapp.data.AppLanguage
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Folder
+import com.example.simpleapp.UserFoldersActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,6 +133,23 @@ fun SettingsScreen(
                     )
                 }
             }
+
+            SectionSpacer()
+
+            SectionTitle(stringResource(R.string.settings_folders))
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_folders_manage)) },
+                supportingContent = { Text(stringResource(R.string.settings_folders_hint)) },
+                leadingContent = {
+                    Icon(Icons.Default.Folder, contentDescription = null)
+                },
+                trailingContent = {
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+                },
+                modifier = Modifier.clickable {
+                    context.startActivity(UserFoldersActivity.createIntent(context))
+                }
+            )
 
             SectionSpacer()
 

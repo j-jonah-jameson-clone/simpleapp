@@ -10,9 +10,6 @@ private fun isEnglish(): Boolean = Locale.getDefault().language == "en"
 fun formatDateTime(millis: Long): String =
     SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(Date(millis))
 
-fun formatDate(millis: Long): String =
-    SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date(millis))
-
 fun formatFileSize(bytes: Long): String {
     val units = if (isEnglish()) {
         listOf("B", "KB", "MB", "GB", "TB")
@@ -60,15 +57,3 @@ fun formatFocalLength(millimeters: Float?): String? {
     return String.format(Locale.getDefault(), "%.0f $unit", millimeters)
 }
 
-fun formatRelativeTime(millis: Long, now: Long = System.currentTimeMillis()): String {
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(now - millis)
-    val english = isEnglish()
-    return when {
-        minutes < 1 -> if (english) "just now" else "только что"
-        minutes < 60 -> if (english) "$minutes min ago" else "$minutes мин назад"
-        minutes < 60 * 24 -> if (english) "${minutes / 60} h ago" else "${minutes / 60} ч назад"
-        minutes < 60 * 24 * 30 ->
-            if (english) "${minutes / (60 * 24)} d ago" else "${minutes / (60 * 24)} дн. назад"
-        else -> formatDate(millis)
-    }
-}
