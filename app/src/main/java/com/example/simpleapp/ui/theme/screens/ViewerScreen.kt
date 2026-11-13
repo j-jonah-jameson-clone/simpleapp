@@ -90,6 +90,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.simpleapp.data.FilteredImageSaver
 import kotlinx.coroutines.launch
+import com.example.simpleapp.ui.theme.screens.components.FolderPickerDialog
+import androidx.compose.material.icons.filled.CreateNewFolder
+
 
 private val ViewerBackground = Color(0xFF101012)
 
@@ -123,6 +126,8 @@ fun ViewerScreen(
     val current = images[pagerState.currentPage]
 
     var showInfo by remember { mutableStateOf(false) }
+
+    var showFolders by remember { mutableStateOf(false) }
 
     var details by remember(current.id) { mutableStateOf<ImageDetails?>(null) }
 
@@ -172,6 +177,13 @@ fun ViewerScreen(
                 onDismiss = { showInfo = false }
             )
         }
+        if (showFolders) {
+            FolderPickerDialog(
+                imageIds = listOf(current.id),
+                titleRes = R.string.folders_dialog_title,
+                onDismiss = { showFolders = false }
+            )
+        }
 
         TopAppBar(
             modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
@@ -215,6 +227,12 @@ fun ViewerScreen(
                         imageVector = Icons.Default.Share,
                         contentDescription = stringResource(R.string.share_chooser_title),
                         tint = Color.White
+                    )
+                }
+                IconButton(onClick = { showFolders = true }) {
+                    Icon(
+                        imageVector = Icons.Default.CreateNewFolder,
+                        contentDescription = stringResource(R.string.action_add_to_folder)
                     )
                 }
                 IconButton(onClick = { showInfo = true }) {

@@ -20,6 +20,7 @@ import com.example.simpleapp.ui.theme.screens.MainTab
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.SelectAll
+import androidx.compose.material.icons.filled.CreateNewFolder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,6 +79,7 @@ fun SelectionTopBar(
     selectedCount: Int,
     onBack: () -> Unit,
     onSelectAll: () -> Unit,
+    onAddToFolderClick: () -> Unit,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -97,6 +99,12 @@ fun SelectionTopBar(
                 Icon(
                     imageVector = Icons.Default.SelectAll,
                     contentDescription = stringResource(R.string.action_select_all)
+                )
+            }
+            IconButton(onClick = onAddToFolderClick) {
+                Icon(
+                    imageVector = Icons.Default.CreateNewFolder,
+                    contentDescription = stringResource(R.string.action_add_to_folder)
                 )
             }
             IconButton(onClick = onDeleteClick) {

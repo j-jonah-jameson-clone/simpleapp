@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,8 +25,9 @@ import com.example.simpleapp.ui.theme.screens.ViewerLoading
 import com.example.simpleapp.ui.theme.screens.ViewerScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.example.simpleapp.ui.theme.ThemeState
 
-class ViewerActivity : ComponentActivity() {
+class ViewerActivity : LocaleAwareActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -44,9 +44,10 @@ class ViewerActivity : ComponentActivity() {
         }
 
         val preferences = SettingsStore(this)
+        ThemeState.load(this)
 
         setContent {
-            SimpleappTheme {
+            SimpleappTheme (styleSystemBars = false){
                 var images by remember { mutableStateOf<List<ImageItem>?>(null) }
                 var favoriteIds by remember { mutableStateOf(preferences.favoriteIds) }
 

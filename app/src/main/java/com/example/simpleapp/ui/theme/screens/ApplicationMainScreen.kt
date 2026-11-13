@@ -32,11 +32,16 @@ import kotlinx.coroutines.withContext
 import com.example.simpleapp.data.SettingsStore
 import com.example.simpleapp.data.AppIntents
 import android.app.Activity
+import com.example.simpleapp.data.ImageFolder
+import com.example.simpleapp.data.UserFolder
+import com.example.simpleapp.data.UserFoldersStore
 
 @Composable
 fun ApplicationMainScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val preferences = remember { SettingsStore(context) }
+    val userFoldersStore = remember { UserFoldersStore(context) }
+    var userFolders by remember { mutableStateOf(userFoldersStore.loadFolders()) }
 
     var selectedTab by rememberSaveable { mutableStateOf(MainTab.GALLERY) }
     var gridColumns by remember { mutableIntStateOf(preferences.gridColumns) }
@@ -64,18 +69,37 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
     val allFoldersName = stringResource(R.string.folder_all)
     val unknownFolderName = stringResource(R.string.unknown_folder)
 
-    val folders = remember(images, allFoldersName, unknownFolderName) {
-        images?.let {
+    val folders = remember(images, userFolders, allFoldersName, unknownFolderName) {
+        val systemFolders = images?.let {
             GalleryRepository.loadImagesByFolder(
                 images = it,
                 allFoldersName = allFoldersName,
                 unknownFolderName = unknownFolderName
             )
         }.orEmpty()
+
+        val existingIds = images?.mapTo(HashSet()) { it.id }.orEmpty()
+        val createdFolders = userFolders.map { folder ->
+            ImageFolder(
+                id = UserFolder.encodeId(folder.id),
+                name = folder.name,
+                count = folder.imageIds.count { imageId -> imageId in existingIds }
+            )
+        }
+
+        systemFolders + createdFolders
     }
 
-    val galleryImages = remember(images, sortOrder, selectedFolderId) {
-        images?.let { sortOrder.apply(GalleryRepository.filterByFolder(it, selectedFolderId)) }.orEmpty()
+    val galleryImages = remember(images, sortOrder, selectedFolderId, userFolders) {
+        val visible = images.orEmpty()
+        val filtered = if (UserFolder.isEncoded(selectedFolderId)) {
+            val folderId = UserFolder.decodeId(selectedFolderId)
+            val imageIds = userFolders.firstOrNull { it.id == folderId }?.imageIds.orEmpty()
+            visible.filter { image -> image.id in imageIds }
+        } else {
+            GalleryRepository.filterByFolder(visible, selectedFolderId)
+        }
+        sortOrder.apply(filtered)
     }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -91,6 +115,14 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         gridColumns = preferences.gridColumns
         sortOrder = preferences.sortOrder
         selectedFolderId = preferences.selectedFolderId
+
+        userFolders = userFoldersStore.loadFolders()
+        if (UserFolder.isEncoded(selectedFolderId) &&
+            userFolders.none { UserFolder.encodeId(it.id) == selectedFolderId }
+        ) {
+            selectedFolderId = GalleryRepository.ALL_FOLDERS_ID
+            preferences.selectedFolderId = GalleryRepository.ALL_FOLDERS_ID
+        }
     }
 
     val openSettings: () -> Unit = {
@@ -101,6 +133,7 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         favoriteIds = preferences.favoriteIds
+        userFolders = userFoldersStore.loadFolders()
         if (result.resultCode == Activity.RESULT_OK) reloadKey++
     }
 
@@ -156,7 +189,12 @@ fun ApplicationMainScreen(modifier: Modifier = Modifier) {
             onImagesDeleted = { removedIds ->
                 preferences.forgetFavorites(removedIds)
                 favoriteIds = preferences.favoriteIds
+                userFoldersStore.forgetImages(removedIds)
+                userFolders = userFoldersStore.loadFolders()
                 reloadKey++
+            },
+            onImagesAddedToFolder = {
+                userFolders = userFoldersStore.loadFolders()
             },
             onOpenImage = { item -> openImage(galleryImages, item) },
             onSettingsClick = openSettings,

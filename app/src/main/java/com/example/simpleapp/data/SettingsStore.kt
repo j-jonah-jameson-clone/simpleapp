@@ -27,6 +27,14 @@ class SettingsStore(context: Context) {
         get() = readLong(KEY_FOLDER_ID, GalleryRepository.ALL_FOLDERS_ID)
         set(value) = writeValue(KEY_FOLDER_ID, value.toString())
 
+    var themeMode: ThemeMode
+        get() = ThemeMode.fromStorage(readString(KEY_THEME_MODE))
+        set(value) = writeValue(KEY_THEME_MODE, value.storageValue)
+
+    var language: AppLanguage
+        get() = AppLanguage.fromStorage(readString(KEY_LANGUAGE))
+        set(value) = writeValue(KEY_LANGUAGE, value.storageValue)
+
     val favoriteIds: Set<Long>
         get() = database.query(
             SettingsDatabase.TABLE_FAVORITES,
@@ -105,11 +113,13 @@ class SettingsStore(context: Context) {
 
     companion object {
         private const val KEY_GRID_COLUMNS = "grid_columns"
+        private const val KEY_THEME_MODE = "theme_mode"
         const val MIN_GRID_COLUMNS = 2
         const val MAX_GRID_COLUMNS = 5
         const val DEFAULT_GRID_COLUMNS = 3
         private const val KEY_SORT_ORDER = "sort_order"
         private const val KEY_FOLDER_ID = "folder_id"
         val DEFAULT_SORT_ORDER = ImageSortOrder.DATE_DESC
+        private const val KEY_LANGUAGE = "language"
     }
 }

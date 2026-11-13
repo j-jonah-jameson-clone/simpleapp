@@ -8,7 +8,6 @@
     <string name="action_back">Назад</string>
     <string name="action_settings">Настройки</string>
     <string name="action_cancel">Отмена</string>
-    <string name="action_retry">Обновить</string>
     <string name="action_grant">Разрешить доступ</string>
     <string name="action_open_settings">Открыть настройки</string>
     <string name="action_info">Сведения о фото</string>
@@ -34,7 +33,6 @@
     <string name="about_developer">Разработчик</string>
     <string name="about_developer_name">Гончаров Т.С.</string>
     <string name="about_version_value">1.0.0</string>
-    <string name="settings_fixed_hint">Пока доступен один вариант. Остальные появятся в следующих версиях.</string>
 
     <string name="action_remove_favorite">Убрать</string>
     <string name="favorite_remove_title">Убрать из избранного?</string>
@@ -90,11 +88,38 @@
     <string name="save_error">Не удалось сохранить копию</string>
     <string name="filter_album_name">Фильтры</string>
 
+    <string name="settings_folders">Мои папки</string>
+    <string name="settings_folders_manage">Управление папками</string>
+    <string name="settings_folders_hint">Создавать свои наборы фотографий</string>
+
+    <string name="title_user_folders">Мои папки</string>
+    <string name="action_create_folder">Создать папку</string>
+    <string name="action_rename_folder">Переименовать</string>
+    <string name="action_delete_folder">Удалить папку</string>
+    <string name="action_folder_menu">Ещё</string>
+    <string name="folder_name_label">Название</string>
+    <string name="folder_create_title">Новая папка</string>
+    <string name="folder_rename_title">Переименовать папку</string>
+    <string name="folder_delete_title">Удалить папку?</string>
+    <string name="folder_delete_message">Папка «%1$s» будет удалена. Фотографии останутся в памяти устройства.</string>
+    <string name="empty_user_folders">Пока нет папок</string>
+    <string name="empty_user_folders_hint">Создайте папку и добавляйте в неё фотографии из просмотрщика.</string>
+    <string name="action_add_to_folder">Добавить в папку</string>
+    <string name="folders_dialog_title">Папки с этим фото</string>
+    <string name="folders_dialog_empty">Папок пока нет. Создайте первую.</string>
+
     <plurals name="grid_columns_value">
         <item quantity="one">%d колонка</item>
         <item quantity="few">%d колонки</item>
         <item quantity="many">%d колонок</item>
         <item quantity="other">%d колонки</item>
+    </plurals>
+
+    <plurals name="folder_images_count">
+        <item quantity="one">%d фото</item>
+        <item quantity="few">%d фото</item>
+        <item quantity="many">%d фото</item>
+        <item quantity="other">%d фото</item>
     </plurals>
 
     <plurals name="delete_confirm_message">
